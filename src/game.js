@@ -21,19 +21,21 @@ const cube = new Box({
   width: 1,
   height: 1,
   depth:1,
+  color: 0x00ff00
 });
 cube.castShadow = true;
 scene.add(cube);
 
 // GROUND
-const groundWidth = 10;
-const groundHeight = 0.5;
-const groundDepth = 10;
-const groundGeometry = new THREE.BoxGeometry(groundWidth, groundHeight, groundDepth);
-const groundMaterial = new THREE.MeshStandardMaterial({color: 0x3365ff});
-const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+const ground = new Box({
+  width: 10,
+  height: 0.5,
+  depth: 10,
+  color: 0x3365ff
+})
 ground.receiveShadow = true;
-ground.position.y = -2
+ground.position.y = -2;
+ground.update();
 scene.add(ground);
 
 // LIGHT
@@ -42,20 +44,23 @@ const intensity = 3;
 const light = new THREE.DirectionalLight(color, intensity);
 light.position.y = 3;
 light.position.z = 2;
+// SHADOW
 light.castShadow = true;
 
 scene.add(light);
-
-// SHADOW
-console.log(cube.height / 2);
 
 camera.position.z = 5;
 
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-//   cube.rotation.x += 0.01;
-//   cube.rotation.y += 0.01;
-cube.position.y -= 0.01;
+  //   cube.rotation.x += 0.01;
+  //   cube.rotation.y += 0.01;
+  if(cube.bottom > ground.top){
+    cube.position.y -= 0.01;
+  }else{
+    cube.position.y = cube.position.y
+  }
+  cube.update();
 }
 animate()
