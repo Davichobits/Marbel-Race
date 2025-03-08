@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Box } from './utils/Box';
 
 const scene = new THREE.Scene();
 
@@ -16,12 +17,11 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-const boxWidth = 1;
-const boxHeight = 1;
-const boxDepth = 1;
-const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-const material = new THREE.MeshStandardMaterial({color: 0x00ff00});
-const cube = new THREE.Mesh(geometry, material);
+const cube = new Box({
+  width: 1,
+  height: 1,
+  depth:1,
+});
 cube.castShadow = true;
 scene.add(cube);
 
@@ -40,20 +40,22 @@ scene.add(ground);
 const color = 0XFFFFFF;
 const intensity = 3;
 const light = new THREE.DirectionalLight(color, intensity);
-light.position.set(2,5,2);
+light.position.y = 3;
+light.position.z = 2;
 light.castShadow = true;
 
 scene.add(light);
 
 // SHADOW
-
+console.log(cube.height / 2);
 
 camera.position.z = 5;
 
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+//   cube.rotation.x += 0.01;
+//   cube.rotation.y += 0.01;
+cube.position.y -= 0.01;
 }
 animate()
