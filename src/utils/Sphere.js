@@ -43,6 +43,7 @@ export class Sphere extends THREE.Mesh{
 
 
     if(this.bottom + this.velocity.y <= ground.top){
+      this.velocity.y *= 0.8
       this.velocity.y = -this.velocity.y;
     } else{
       this.position.y += this.velocity.y;
