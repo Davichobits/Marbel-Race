@@ -13,7 +13,22 @@ export class Box extends THREE.Mesh {
    * @param {number} options.depth - Profundidad de la caja.
    * @param {number|string} options.color - Color de la caja (puede ser un valor hexadecimal o una cadena de color).
    */
-  constructor({ width, height, depth, color }) {
+  constructor({ 
+    width, 
+    height, 
+    depth, 
+    color = '#00ff00', 
+    velocity = {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    position = {
+      x: 0,
+      y: 0,
+      z: 0
+    }  
+  }) {
     super(
       new THREE.BoxGeometry(width, height, depth),
       new THREE.MeshStandardMaterial({ color })
@@ -28,14 +43,33 @@ export class Box extends THREE.Mesh {
     /** @type {number} */
     this.depth = depth;
 
+    this.position.set(position.x, position.y, position.z);
+
     this.bottom = this.position.y - this.height / 2;
     this.top = this.position.y + this.height / 2;
+
+    this.velocity = velocity;
+    this.gravity = -0.002;
   }
   /** @type {number} */
 
-  /** @type {number} */
-  update(){
+  /**
+ * Actualiza las propiedades `bottom` y `top` en función de la posición y la altura.
+ * `bottom` se establece en la coordenada Y menos la mitad de la altura.
+ * `top` se establece en la coordenada Y más la mitad de la altura.
+ *
+ * @returns {void}
+ */
+  update(ground){
     this.bottom = this.position.y - this.height / 2;
     this.top = this.position.y + this.height / 2;
+
+    this.velocity.y += this.gravity;
+
+    if(this.bottom + this.velocity.y <= ground.top){
+      this.velocity.y = -this.velocity.y;
+    } else{
+      this.position.y += this.velocity.y;
+    }
   }
 }

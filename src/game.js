@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Box } from './utils/Box';
+import { Sphere } from './utils/Sphere';
 
 const scene = new THREE.Scene();
 
@@ -17,26 +18,55 @@ document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-const cube = new Box({
-  width: 1,
-  height: 1,
-  depth:1,
-  color: 0x00ff00
-});
-cube.castShadow = true;
-scene.add(cube);
-
 // GROUND
 const ground = new Box({
   width: 10,
   height: 0.5,
   depth: 10,
-  color: 0x3365ff
+  color: 0x3365ff,
+  position:{
+    x:0,
+    y:-2,
+    z:0,
+  }
 })
 ground.receiveShadow = true;
-ground.position.y = -2;
-ground.update();
 scene.add(ground);
+
+// CUBE
+const cube = new Box({
+  width: 1,
+  height: 1,
+  depth:1,
+  color: 0x00ff00,
+  velocity:{
+    x: 0,
+    y: -0.01,
+    z: 0
+  }
+});
+cube.castShadow = true;
+scene.add(cube);
+
+// SPHERE
+const sphere = new Sphere({
+  radius: 1, 
+  widthSegments:64, 
+  heightSegments:32, 
+  color: 0x00ff00,
+  velocity:{
+    x: 0,
+    y: -0.01,
+    z: 0
+  },
+  position:{
+    x: 2,
+    y: 0,
+    z: 0
+  }
+});
+sphere.castShadow = true;
+scene.add(sphere);
 
 // LIGHT
 const color = 0XFFFFFF;
@@ -44,6 +74,7 @@ const intensity = 3;
 const light = new THREE.DirectionalLight(color, intensity);
 light.position.y = 3;
 light.position.z = 2;
+
 // SHADOW
 light.castShadow = true;
 
@@ -54,13 +85,7 @@ camera.position.z = 5;
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  //   cube.rotation.x += 0.01;
-  //   cube.rotation.y += 0.01;
-  if(cube.bottom > ground.top){
-    cube.position.y -= 0.01;
-  }else{
-    cube.position.y = cube.position.y
-  }
-  cube.update();
+  cube.update(ground);
+  sphere.update(ground);
 }
 animate()
