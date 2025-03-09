@@ -50,7 +50,7 @@ scene.add(cube);
 
 // SPHERE
 const sphere = new Sphere({
-  radius: 1, 
+  radius: 0.5, 
   widthSegments:64, 
   heightSegments:32, 
   color: 0x00ff00,
