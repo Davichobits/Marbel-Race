@@ -38,10 +38,11 @@ export class Sphere extends THREE.Mesh{
   update(ground){
     this.bottom = this.position.y - this.radius; 
     this.top = this.position.y + this.radius;
-    
+    this.applyGravity(ground);
+  }
+
+  applyGravity(ground){
     this.velocity.y += this.gravity;
-
-
     if(this.bottom + this.velocity.y <= ground.top){
       this.velocity.y *= 0.8
       this.velocity.y = -this.velocity.y;
