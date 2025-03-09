@@ -82,9 +82,53 @@ scene.add(light);
 
 camera.position.z = 5;
 
+// KEYBOARD LISTENER
+
+const keys={
+  a:{
+    isPressed: false,
+  },
+  d:{
+    isPressed: false,
+  }
+}
+window.addEventListener('keydown', (e)=>{
+  switch(e.code){
+    case 'KeyA':
+      keys.a.isPressed = true
+      break
+    case 'KeyD':
+      keys.d.isPressed = true
+      break
+  }
+});
+
+window.addEventListener('keyup', (e)=>{
+  switch(e.code){
+    case 'KeyA':
+      keys.a.isPressed = false
+      break
+    case 'KeyD':
+      keys.d.isPressed = false
+      break
+  }
+});
+
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
+
+  // MOVEMENT CODE
+  cube.velocity.x = 0;
+  sphere.velocity.x = 0;
+  if(keys.a.isPressed){
+    cube.velocity.x = -0.01;
+    sphere.velocity.x = -0.01;
+  }else if(keys.d.isPressed){
+    cube.velocity.x = +0.01;
+    sphere.velocity.x = +0.01;
+  }
+
   cube.update(ground);
   sphere.update(ground);
 }
