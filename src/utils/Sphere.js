@@ -40,6 +40,7 @@ export class Sphere extends THREE.Mesh{
     this.top = this.position.y + this.radius;
 
     this.position.x += this.velocity.x
+    this.position.z += this.velocity.z
     this.applyGravity(ground);
   }
 

@@ -65,6 +65,7 @@ export class Box extends THREE.Mesh {
     this.top = this.position.y + this.height / 2;
 
     this.position.x += this.velocity.x
+    this.position.z += this.velocity.z
     this.applyGravity(ground);
   }
 

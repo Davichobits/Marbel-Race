@@ -66,7 +66,7 @@ const sphere = new Sphere({
   }
 });
 sphere.castShadow = true;
-scene.add(sphere);
+// scene.add(sphere);
 
 // LIGHT
 const color = 0XFFFFFF;
@@ -90,6 +90,12 @@ const keys={
   },
   d:{
     isPressed: false,
+  },
+  s:{
+    isPressed: false,
+  },
+  w:{
+    isPressed: false,
   }
 }
 window.addEventListener('keydown', (e)=>{
@@ -99,6 +105,12 @@ window.addEventListener('keydown', (e)=>{
       break
     case 'KeyD':
       keys.d.isPressed = true
+      break
+    case 'KeyS':
+      keys.s.isPressed = true
+      break
+    case 'KeyW':
+      keys.w.isPressed = true
       break
   }
 });
@@ -111,6 +123,12 @@ window.addEventListener('keyup', (e)=>{
     case 'KeyD':
       keys.d.isPressed = false
       break
+    case 'KeyS':
+      keys.s.isPressed = false
+      break
+    case 'KeyW':
+      keys.w.isPressed = false
+      break
   }
 });
 
@@ -120,16 +138,20 @@ function animate(){
 
   // MOVEMENT CODE
   cube.velocity.x = 0;
-  sphere.velocity.x = 0;
+  cube.velocity.z = 0;
   if(keys.a.isPressed){
     cube.velocity.x = -0.01;
-    sphere.velocity.x = -0.01;
   }else if(keys.d.isPressed){
     cube.velocity.x = +0.01;
-    sphere.velocity.x = +0.01;
+  }
+  if(keys.w.isPressed){
+    cube.velocity.z = -0.01;
+  }else if(keys.s.isPressed){
+    cube.velocity.z = +0.01;
   }
 
+
   cube.update(ground);
-  sphere.update(ground);
+  // sphere.update(ground);
 }
 animate()
