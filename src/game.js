@@ -3,6 +3,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Box } from './utils/Box';
 import { Sphere } from './utils/Sphere';
 
+// Game variables
+const boxVelocity = 0.05;
+
 const scene = new THREE.Scene();
 
 const fov = 75;
@@ -66,7 +69,7 @@ const sphere = new Sphere({
   }
 });
 sphere.castShadow = true;
-scene.add(sphere);
+// scene.add(sphere);
 
 // LIGHT
 const color = 0XFFFFFF;
@@ -82,10 +85,76 @@ scene.add(light);
 
 camera.position.z = 5;
 
+// KEYBOARD LISTENER
+
+const keys={
+  a:{
+    isPressed: false,
+  },
+  d:{
+    isPressed: false,
+  },
+  s:{
+    isPressed: false,
+  },
+  w:{
+    isPressed: false,
+  }
+}
+window.addEventListener('keydown', (e)=>{
+  switch(e.code){
+    case 'KeyA':
+      keys.a.isPressed = true
+      break
+    case 'KeyD':
+      keys.d.isPressed = true
+      break
+    case 'KeyS':
+      keys.s.isPressed = true
+      break
+    case 'KeyW':
+      keys.w.isPressed = true
+      break
+  }
+});
+
+window.addEventListener('keyup', (e)=>{
+  switch(e.code){
+    case 'KeyA':
+      keys.a.isPressed = false
+      break
+    case 'KeyD':
+      keys.d.isPressed = false
+      break
+    case 'KeyS':
+      keys.s.isPressed = false
+      break
+    case 'KeyW':
+      keys.w.isPressed = false
+      break
+  }
+});
+
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
+
+  // MOVEMENT CODE
+  cube.velocity.x = 0;
+  cube.velocity.z = 0;
+  if(keys.a.isPressed){
+    cube.velocity.x = -boxVelocity;
+  }else if(keys.d.isPressed){
+    cube.velocity.x = +boxVelocity;
+  }
+  if(keys.w.isPressed){
+    cube.velocity.z = -boxVelocity;
+  }else if(keys.s.isPressed){
+    cube.velocity.z = +boxVelocity;
+  }
+
+
   cube.update(ground);
-  sphere.update(ground);
+  // sphere.update(ground);
 }
 animate()
