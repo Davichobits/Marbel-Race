@@ -74,19 +74,19 @@ export class Box extends THREE.Mesh {
 
     this.position.x += this.velocity.x
     this.position.z += this.velocity.z
-    this.boxCollision(ground);
     
-
+    
     this.applyGravity(ground);
   }
 
   applyGravity(ground){
     this.velocity.y += this.gravity;
 
-    if(this.left > ground.right || this.right < ground.left){
-      // fall
-      this.position.y += this.velocity.y;
-    }else if(this.bottom + this.velocity.y <= ground.top){
+    const isCollition = this.boxCollision({
+      box1: this,
+      box2: ground,
+    });
+    if(isCollition){
       // collision
       this.velocity.y *= 0.8
       this.velocity.y = -this.velocity.y;
@@ -97,14 +97,15 @@ export class Box extends THREE.Mesh {
     
   }
 
-  boxCollision(){
+  boxCollision({
+    box1,
+    box2
+  }){
     // detect for collision
-    const xCollision = this.right >= ground.left && this.left <= ground.right
-    const yCollision = this.bottom >= ground.top && this.top >= ground.bottom
-    const zCollision = this.front >= ground.back && this.back <= this.front
+    const xCollision = box1.right >= box2.left && box1.left <= box2.right
+    const yCollision = box1.bottom + box1.velocity.y <= box2.top && box1.top >= box2.bottom
+    const zCollision = box1.front >= box2.back && box1.back <= box2.front
 
-    if(xCollision && yCollision && zCollision){
-      console.log('Collision')
-    }
+    return xCollision && yCollision && zCollision;
   }
 }

@@ -3,6 +3,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Box } from './utils/Box';
 import { Sphere } from './utils/Sphere';
 
+// Game variables
+const boxVelocity = 0.05;
+
 const scene = new THREE.Scene();
 
 const fov = 75;
@@ -140,14 +143,14 @@ function animate(){
   cube.velocity.x = 0;
   cube.velocity.z = 0;
   if(keys.a.isPressed){
-    cube.velocity.x = -0.01;
+    cube.velocity.x = -boxVelocity;
   }else if(keys.d.isPressed){
-    cube.velocity.x = +0.01;
+    cube.velocity.x = +boxVelocity;
   }
   if(keys.w.isPressed){
-    cube.velocity.z = -0.01;
+    cube.velocity.z = -boxVelocity;
   }else if(keys.s.isPressed){
-    cube.velocity.z = +0.01;
+    cube.velocity.z = +boxVelocity;
   }
 
 
