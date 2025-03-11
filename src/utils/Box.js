@@ -45,8 +45,7 @@ export class Box extends THREE.Mesh {
 
     this.position.set(position.x, position.y, position.z);
 
-    this.bottom = this.position.y - this.height / 2;
-    this.top = this.position.y + this.height / 2;
+    this.updateSides()
 
     this.velocity = velocity;
     this.gravity = -0.002;
@@ -60,23 +59,52 @@ export class Box extends THREE.Mesh {
  *
  * @returns {void}
  */
-  update(ground){
+
+  updateSides(){
     this.bottom = this.position.y - this.height / 2;
     this.top = this.position.y + this.height / 2;
+    this.left = this.position.x - this.width / 2;
+    this.right = this.position.x + this.width / 2;
+    this.front = this.position.z + this.depth / 2;
+    this.back = this.position.z - this.depth / 2;
+  }
+
+  update(ground){
+    this.updateSides()
 
     this.position.x += this.velocity.x
     this.position.z += this.velocity.z
+    this.boxCollision(ground);
+    
+
     this.applyGravity(ground);
   }
 
   applyGravity(ground){
     this.velocity.y += this.gravity;
 
-    if(this.bottom + this.velocity.y <= ground.top){
+    if(this.left > ground.right || this.right < ground.left){
+      // fall
+      this.position.y += this.velocity.y;
+    }else if(this.bottom + this.velocity.y <= ground.top){
+      // collision
       this.velocity.y *= 0.8
       this.velocity.y = -this.velocity.y;
-    } else{
+    }else {
+      // fall
       this.position.y += this.velocity.y;
+    }
+    
+  }
+
+  boxCollision(){
+    // detect for collision
+    const xCollision = this.right >= ground.left && this.left <= ground.right
+    const yCollision = this.bottom >= ground.top && this.top >= ground.bottom
+    const zCollision = this.front >= ground.back && this.back <= this.front
+
+    if(xCollision && yCollision && zCollision){
+      console.log('Collision')
     }
   }
 }
