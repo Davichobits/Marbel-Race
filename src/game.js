@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Box } from './utils/Box';
 import { Sphere } from './utils/Sphere';
+import { boxCollision } from './utils/boxCollision';
 
 // Game variables
 const boxVelocity = 0.05;
@@ -135,8 +136,30 @@ window.addEventListener('keyup', (e)=>{
   }
 });
 
+const enemy = new Box({
+  color: 'red',
+  position:{
+    x: 0,
+    y: 0,
+    z: -3,
+  },
+  velocity: {
+    x: 0,
+    y: -0.01,
+    z: 0,
+  },
+  zAcceleration: true,
+});
+cube.castShadow = true;
+scene.add(enemy);
+
+const enemies = [enemy]
+
+enemies.forEach(enemie => {
+});
+
 function animate(){
-  requestAnimationFrame(animate);
+  const animationId = requestAnimationFrame(animate);
   renderer.render(scene, camera);
 
   // MOVEMENT CODE
@@ -155,6 +178,16 @@ function animate(){
 
 
   cube.update(ground);
-  // sphere.update(ground);
+  enemies.forEach(enemy => {
+    enemy.update(ground);
+
+    if(boxCollision({
+      box1: cube,
+      box2: enemy
+    })){
+      window.cancelAnimationFrame(animationId);
+    }
+
+  })
 }
 animate()

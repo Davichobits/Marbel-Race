@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { boxCollision } from './boxCollision';
 
 /**
  * Representa una caja en 3D utilizando Three.js.
@@ -14,9 +15,9 @@ export class Box extends THREE.Mesh {
    * @param {number|string} options.color - Color de la caja (puede ser un valor hexadecimal o una cadena de color).
    */
   constructor({ 
-    width, 
-    height, 
-    depth, 
+    width = 1, 
+    height = 1, 
+    depth = 1, 
     color = '#00ff00', 
     velocity = {
       x: 0,
@@ -27,7 +28,8 @@ export class Box extends THREE.Mesh {
       x: 0,
       y: 0,
       z: 0
-    }  
+    },
+    zAcceleration = false,
   }) {
     super(
       new THREE.BoxGeometry(width, height, depth),
@@ -49,6 +51,7 @@ export class Box extends THREE.Mesh {
 
     this.velocity = velocity;
     this.gravity = -0.002;
+    this.zAcceleration = zAcceleration;
   }
   /** @type {number} */
 
@@ -72,6 +75,10 @@ export class Box extends THREE.Mesh {
   update(ground){
     this.updateSides()
 
+    if(this.zAcceleration){
+      this.velocity.z += 0.0001;
+    }
+
     this.position.x += this.velocity.x
     this.position.z += this.velocity.z
     
@@ -82,7 +89,7 @@ export class Box extends THREE.Mesh {
   applyGravity(ground){
     this.velocity.y += this.gravity;
 
-    const isCollition = this.boxCollision({
+    const isCollition = boxCollision({
       box1: this,
       box2: ground,
     });
@@ -95,17 +102,5 @@ export class Box extends THREE.Mesh {
       this.position.y += this.velocity.y;
     }
     
-  }
-
-  boxCollision({
-    box1,
-    box2
-  }){
-    // detect for collision
-    const xCollision = box1.right >= box2.left && box1.left <= box2.right
-    const yCollision = box1.bottom + box1.velocity.y <= box2.top && box1.top >= box2.bottom
-    const zCollision = box1.front >= box2.back && box1.back <= box2.front
-
-    return xCollision && yCollision && zCollision;
   }
 }
