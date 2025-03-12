@@ -14,9 +14,9 @@ export class Box extends THREE.Mesh {
    * @param {number|string} options.color - Color de la caja (puede ser un valor hexadecimal o una cadena de color).
    */
   constructor({ 
-    width, 
-    height, 
-    depth, 
+    width = 1, 
+    height = 1, 
+    depth = 1, 
     color = '#00ff00', 
     velocity = {
       x: 0,

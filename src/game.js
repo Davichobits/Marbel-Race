@@ -135,6 +135,27 @@ window.addEventListener('keyup', (e)=>{
   }
 });
 
+const enemy = new Box({
+  color: 'red',
+  position:{
+    x: 0,
+    y: 0,
+    z: -3,
+  },
+  velocity: {
+    x: 0,
+    y: -0.01,
+    z: 0.005
+  },
+});
+cube.castShadow = true;
+scene.add(enemy);
+
+const enemies = [enemy]
+
+enemies.forEach(enemie => {
+});
+
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
@@ -155,6 +176,8 @@ function animate(){
 
 
   cube.update(ground);
-  // sphere.update(ground);
+  enemies.forEach(enemy => {
+    enemy.update(ground);
+  })
 }
 animate()
