@@ -31,6 +31,7 @@ export class GameScene extends Phaser.Scene {
   private leadingMarble: Marble | null;
   private obstacleColor: number;
   private countdownText: Phaser.GameObjects.Text | null;
+  private baseTextStyle: any;
 
   constructor() {
     super({ key: "GameScene" });
@@ -39,12 +40,24 @@ export class GameScene extends Phaser.Scene {
     this.leadingMarble = null;
     this.obstacleColor = 0x800080;
     this.countdownText = null;
+    this.baseTextStyle = {
+      fontFamily: 'FONT_PRESS_START_2P',
+      fontSize: '32px',
+      color: '#000000',
+    };
   }
 
   preload(): void {
+    // Load marbles
     MARBLES.forEach((marble, index) => {
       this.load.image(`marble-${index}`, marble.url);
     });
+
+    // Load custom font
+    this.load.font(
+      'FONT_PRESS_START_2P',
+      'assets/fonts/Press_Start_2P/PressStart2P-Regular.ttf'
+    );
   }
 
   create(): void {
@@ -127,18 +140,13 @@ export class GameScene extends Phaser.Scene {
 
     // Add finish line
     const finishLine = this.add.rectangle(400, 2900, 800, 40, 0xffffff);
-    const finishText = this.add.text(400, 2900, "META", {
-      fontSize: "32px",
-      color: "#000000",
-      backgroundColor: "#ffffff",
-    });
+    const finishText = this.add.text(400, 2900, "META", this.baseTextStyle);
     finishText.setOrigin(0.5);
 
-    // Add countdown text
+    // Update countdown text with custom font
     this.countdownText = this.add.text(400, 200, '3', {
+      ...this.baseTextStyle,
       fontSize: '64px',
-      color: '#000000',
-      backgroundColor: '#ffffff',
       padding: { x: 20, y: 10 }
     });
     this.countdownText.setOrigin(0.5);
@@ -200,6 +208,7 @@ export class GameScene extends Phaser.Scene {
           if (this.getBodyPosition(marble.body).y >= 2900) {
               this.scene.pause();
               const victoryText = this.add.text(400, 300, `¡${MARBLES[index].name} ha ganado!`, {
+                  ...this.baseTextStyle,
                   fontSize: '48px',
                   color: '#fff',
                   backgroundColor: '#000',
