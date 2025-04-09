@@ -25,7 +25,7 @@ interface Obstacle {
   visual: Phaser.GameObjects.Rectangle;
 }
 
-class MarbleRace extends Phaser.Scene {
+export class GameScene extends Phaser.Scene {
   private marbles: Marble[];
   private obstacles: Obstacle[];
   private leadingMarble: Marble | null;
@@ -33,7 +33,7 @@ class MarbleRace extends Phaser.Scene {
   private countdownText: Phaser.GameObjects.Text | null;
 
   constructor() {
-    super({ key: "MarbleRace" });
+    super({ key: "GameScene" });
     this.marbles = [];
     this.obstacles = [];
     this.leadingMarble = null;
@@ -211,18 +211,3 @@ class MarbleRace extends Phaser.Scene {
       });
   }
 }
-
-const config: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    physics: {
-        default: 'matter',
-        matter: {
-            gravity: { x: 0, y: 0.5 }
-        }
-    },
-    scene: MarbleRace
-};
-
-const game = new Phaser.Game(config);
