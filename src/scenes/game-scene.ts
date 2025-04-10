@@ -48,16 +48,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   preload(): void {
-    // Load marbles
-    MARBLES.forEach((marble, index) => {
-      this.load.image(`marble-${index}`, marble.url);
-    });
-
-    // Load custom font
-    this.load.font(
-      'FONT_PRESS_START_2P',
-      'assets/fonts/Press_Start_2P/PressStart2P-Regular.ttf'
-    );
+    // Preloading moved to PreloadScene
   }
 
   create(): void {
@@ -84,8 +75,12 @@ export class GameScene extends Phaser.Scene {
     this.matter.world.setGravity(0, 0);
 
     // Create marbles
+    const startX = 400; // Center position
+    const spacing = 50; // Space between marbles
+    const offset = (MARBLES.length - 1) * spacing / 2; // Calculate total offset
+
     for (let i = 0; i < MARBLES.length; i++) {
-      const marble = this.matter.add.circle(300 + i * 50, 100, 20, {
+      const marble = this.matter.add.circle(startX - offset + (i * spacing), 100, 20, {
         restitution: 0.8,
         friction: 0.005,
         density: 0.001,
