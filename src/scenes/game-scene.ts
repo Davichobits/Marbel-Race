@@ -12,6 +12,30 @@ const MARBLES = [
   {
     name: 'Perú',
     url: 'assets/images/marble3.png'
+  },
+  {
+    name: 'Player',
+    url: 'assets/images/marble1.png'
+  },
+  {
+    name: 'Player 2',
+    url: 'assets/images/marble2.png'
+  },
+  {
+    name: 'Player 3',
+    url: 'assets/images/marble3.png'
+  },
+  {
+    name: 'Player',
+    url: 'assets/images/marble1.png'
+  },
+  {
+    name: 'Player 2',
+    url: 'assets/images/marble2.png'
+  },
+  {
+    name: 'Player 3',
+    url: 'assets/images/marble3.png'
   }
 ];
 
@@ -70,8 +94,51 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
-    // Configure physics and walls with zero gravity initially
-    this.matter.world.setBounds(0, 0, 800, 3000);
+    // Configure physics and walls
+    const wallThickness = 60;
+    const semiCircleRadius = 60;
+    const semiCircleSpacing = semiCircleRadius * 4; // Space between circles equals diameter (2 * radius * 2)
+    
+    // Create base walls
+    this.matter.add.rectangle(-wallThickness/2, 1500, wallThickness, 3000, { isStatic: true });
+    this.matter.add.rectangle(800 + wallThickness/2, 1500, wallThickness, 3000, { isStatic: true });
+
+    // Create semicircles on walls
+    for (let y = 100; y < 3000; y += semiCircleSpacing) {
+      // Left wall semicircles
+      const leftCircle = this.matter.add.circle(0, y, semiCircleRadius, {
+        isStatic: true,
+        friction: 0.2,
+        restitution: 0.5
+      });
+
+      // Right wall semicircles
+      const rightCircle = this.matter.add.circle(800, y, semiCircleRadius, {
+        isStatic: true,
+        friction: 0.2,
+        restitution: 0.5
+      });
+
+      // Visual representation using arcs
+      const leftGraphics = this.add.graphics();
+      leftGraphics.lineStyle(2, this.obstacleColor);
+      leftGraphics.fillStyle(this.obstacleColor);
+      leftGraphics.beginPath();
+      leftGraphics.arc(0, y, semiCircleRadius, -Math.PI/2, Math.PI/2, false);
+      leftGraphics.fillPath();
+      leftGraphics.strokePath();
+
+      const rightGraphics = this.add.graphics();
+      rightGraphics.lineStyle(2, this.obstacleColor);
+      rightGraphics.fillStyle(this.obstacleColor);
+      rightGraphics.beginPath();
+      rightGraphics.arc(800, y, semiCircleRadius, Math.PI/2, -Math.PI/2, false);
+      rightGraphics.fillPath();
+      rightGraphics.strokePath();
+    }
+
+    // Configure world bounds (only top and bottom)
+    this.matter.world.setBounds(0, 0, 800, 3000, 20, true, true, true, true);
     this.matter.world.setGravity(0, 0);
 
     // Create marbles

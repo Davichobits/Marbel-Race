@@ -37,7 +37,13 @@ export class PreloadScene extends Phaser.Scene {
     const marbles = [
       { name: 'Rusia', url: 'assets/images/marble1.png' },
       { name: 'Ecuador', url: 'assets/images/marble2.png' },
-      { name: 'Perú', url: 'assets/images/marble3.png' }
+      { name: 'Perú', url: 'assets/images/marble3.png' },
+      { name: 'Rusia', url: 'assets/images/marble1.png' },
+      { name: 'Ecuador', url: 'assets/images/marble2.png' },
+      { name: 'Perú', url: 'assets/images/marble3.png' },
+      { name: 'Rusia', url: 'assets/images/marble1.png' },
+      { name: 'Ecuador', url: 'assets/images/marble2.png' },
+      { name: 'Perú', url: 'assets/images/marble3.png' },
     ];
 
     marbles.forEach((marble, index) => {
